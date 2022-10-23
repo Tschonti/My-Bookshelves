@@ -3,28 +3,24 @@
 Információk [itt](https://viauac00.github.io/laborok/hf)
 
 ## Mobil- és webes szoftverek
-### [Dátum]
-### [Alkalmazás neve]
-### [Teljes név] - ([Neptun kód])
-### [e-mail cím] 
-### Laborvezető: [Laborvezető neve]
+### 2022.10.18.
+### My bookshelves
+### Fekete Sámuel - (GJ8J3A)
+### feketesamu@gmail.com
+### Laborvezető: Marton István
 
 ## Bemutatás
 
-Az alkalmazás rövid, 2-3 mondatos bemutatása. Honnan az ötlet, mi szülte az igényt, ki lehetne a célközönség.
-A laboron és előadáson bemutatott alkalmazásokat nem lehet házi feladatnak választani.
+Egy olyan alkalmazást szeretnék készíteni, aminek segítségével a felhasználók feljegyezhetik, hogy mely könyveket olvasták el vagy akarják elolvasni. A könyveket különböző, általuk készített virtuális polcokra tehetik fel, például "kedvencek", "el akarom olvasni", stb. Minden könyvhöz lehet jegyzetet is fűzni.
 
 ## Főbb funkciók
 
-Az alkalmazás minden funkciójára kiterjedő leírás (röviden, lényegre törően). Legyen egyértelműen eldönthető, hogy az adott funkció implementálva van-e!
-Pl.: Az alkalmazással lehetőség van tételek felvételére és tárolására, valamint azok rendezett megjelenítésére, illetve frissítésre X hálózati hívás segítségével.
+Az alkalmazás főképernyőjén könyveket lehet keresni cím és szerző alapján. A keresés eredményei a Google Books API-tól érkeznek. A könyvekre rákattintva egy olyan képernyőre kerülünk, ahol a könyvről több részlet olvasható. Itt található egy gomb, amivel a könyvet egy már létező vagy egy új polcra lehet rakni. A polcok nézetre a menüvel lehet elnavigálni, ahol át lehet látni, hogy mely könyvek vannak az egyes polcokon, illetve lehet könyveket törölni is a polcokról. Azokhoz a könyvekhez, amik már felkerültek egy polcra, lehet jegyzetet fűzni. A felhasználó polcai, azok tartalma valamint a jegyzetek perzisztensen tárolódnak a telefon tárhelyén.
 
 ## Választott technológiák:
 
-- (UI)
-- (fragmentek)
-- (RecyclerView)
-- (Perzisztens adattárolás)
-
-
-# Házi feladat dokumentáció (ha nincs, ez a fejezet törölhető)
+- UI
+- fragmentek
+- RecyclerView
+- Perzisztens adattárolás
+- Hálózati (REST) kommunikáció

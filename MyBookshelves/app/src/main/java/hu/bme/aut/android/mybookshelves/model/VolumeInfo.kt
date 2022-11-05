@@ -4,7 +4,7 @@ data class VolumeInfo(
 
     val title: String?,
     val subtitle: String?,
-    val authors: ArrayList<String>,
+    val authors: List<String>,
     val publishedDate: String?,
     val readingModes: ReadingModes?,
     val maturityRating: String?,

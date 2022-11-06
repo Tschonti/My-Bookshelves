@@ -29,8 +29,10 @@ class BookAdapter(private val listener: OnBookSelectedListener) : RecyclerView.A
     override fun getItemCount(): Int = books.size
 
     @SuppressLint("NotifyDataSetChanged")
-    fun replaceBooks(newBooks: List<Resource>) {
-        books.clear()
+    fun addBooks(newBooks: List<Resource>, replace: Boolean) {
+        if (replace) {
+            books.clear()
+        }
         books.addAll(newBooks)
         notifyDataSetChanged()
     }

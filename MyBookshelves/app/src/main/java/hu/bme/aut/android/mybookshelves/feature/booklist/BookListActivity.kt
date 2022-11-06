@@ -7,12 +7,10 @@ import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import hu.bme.aut.android.mybookshelves.network.BooksDataHolder
-import hu.bme.aut.android.mybookshelves.R
 import hu.bme.aut.android.mybookshelves.databinding.ActivityBooklistBinding
 import hu.bme.aut.android.mybookshelves.feature.bookdetails.DetailsActivity
 import hu.bme.aut.android.mybookshelves.model.BooksResponse
 import hu.bme.aut.android.mybookshelves.model.Resource
-import hu.bme.aut.android.mybookshelves.model.VolumeInfo
 import hu.bme.aut.android.mybookshelves.network.NetworkManager
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,6 +23,8 @@ class BookListActivity : AppCompatActivity(), BooksDataHolder, BookAdapter.OnBoo
     private var booksData: BooksResponse? = null
     private lateinit var binding: ActivityBooklistBinding
     private lateinit var adapter: BookAdapter
+    private var startIndex = 0
+    private val resultsPerPage = 10
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +32,16 @@ class BookListActivity : AppCompatActivity(), BooksDataHolder, BookAdapter.OnBoo
         setContentView(binding.root)
         initRecyclerView()
         binding.searchButton.setOnClickListener {
+            startIndex = 0
+            loadBooksData(binding.etSearch.text.toString())
+        }
+        binding.etSearch.setOnEditorActionListener {_, _, _ ->
+            startIndex = 0
+            loadBooksData(binding.etSearch.text.toString())
+            return@setOnEditorActionListener true
+         }
+        binding.moreResultsButton.isEnabled = false
+        binding.moreResultsButton.setOnClickListener {
             loadBooksData(binding.etSearch.text.toString())
         }
     }
@@ -47,14 +57,16 @@ class BookListActivity : AppCompatActivity(), BooksDataHolder, BookAdapter.OnBoo
     }
 
     private fun loadBooksData(query: String) {
-        NetworkManager.getBooks(query)?.enqueue(object : Callback<BooksResponse?> {
+        NetworkManager.getBooks(query, startIndex)?.enqueue(object : Callback<BooksResponse?> {
             override fun onResponse(
                 call: Call<BooksResponse?>,
                 response: Response<BooksResponse?>
             ) {
                 Log.d(TAG, "onResponse: " + response.code())
                 if (response.isSuccessful) {
-                    displayBooksData(response.body())
+                    binding.moreResultsButton.isEnabled = true
+                    displayBooksData(response.body(), startIndex == 0)
+                    startIndex += resultsPerPage
                 } else {
                     Toast.makeText(this@BookListActivity, "Error: " + response.message(), Toast.LENGTH_LONG).show()
                 }
@@ -71,11 +83,11 @@ class BookListActivity : AppCompatActivity(), BooksDataHolder, BookAdapter.OnBoo
         })
     }
 
-    private fun displayBooksData(receivedBooksData: BooksResponse?) {
+    private fun displayBooksData(receivedBooksData: BooksResponse?, replace: Boolean) {
         Log.d("response", receivedBooksData.toString())
         booksData = receivedBooksData
         if (booksData != null) {
-            adapter.replaceBooks(booksData!!.items)
+            adapter.addBooks(booksData!!.items, replace)
         }
     }
 

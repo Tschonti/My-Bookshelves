@@ -5,13 +5,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import hu.bme.aut.android.mybookshelves.databinding.ItemBookBinding
-import hu.bme.aut.android.mybookshelves.model.Resource
+import hu.bme.aut.android.mybookshelves.model.api.Resource
+import hu.bme.aut.android.mybookshelves.model.db.Book
 
 class BookAdapter(private val listener: OnBookSelectedListener) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
-    private var books: MutableList<Resource> = mutableListOf()
+    private var books: MutableList<Book> = mutableListOf()
 
     interface OnBookSelectedListener {
-        fun onBookSelected(book: Resource?)
+        fun onBookSelected(book: Book?)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder = BookViewHolder(
@@ -20,7 +21,7 @@ class BookAdapter(private val listener: OnBookSelectedListener) : RecyclerView.A
 
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
         val item = books[position]
-        holder.binding.BookItemTitleTextView.text = item.volumeInfo?.title
+        holder.binding.BookItemTitleTextView.text = item.title
         holder.binding.BookItemTitleTextView.setOnClickListener {
             listener.onBookSelected(item)
         }
@@ -29,7 +30,7 @@ class BookAdapter(private val listener: OnBookSelectedListener) : RecyclerView.A
     override fun getItemCount(): Int = books.size
 
     @SuppressLint("NotifyDataSetChanged")
-    fun addBooks(newBooks: List<Resource>, replace: Boolean) {
+    fun addBooks(newBooks: List<Book>, replace: Boolean) {
         if (replace) {
             books.clear()
         }

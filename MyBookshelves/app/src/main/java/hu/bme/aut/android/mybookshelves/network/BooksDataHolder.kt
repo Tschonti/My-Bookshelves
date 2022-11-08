@@ -1,7 +1,7 @@
 package hu.bme.aut.android.mybookshelves.network
 
-import hu.bme.aut.android.mybookshelves.model.BooksResponse
+import hu.bme.aut.android.mybookshelves.model.db.Book
 
 interface BooksDataHolder {
-    fun getBooksData(): BooksResponse?
+    fun getBooksData(): List<Book>?
 }

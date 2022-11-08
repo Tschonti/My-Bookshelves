@@ -1,4 +1,4 @@
-package hu.bme.aut.android.mybookshelves.model
+package hu.bme.aut.android.mybookshelves.model.api
 
 data class Epub (
 

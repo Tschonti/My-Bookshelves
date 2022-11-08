@@ -9,8 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import hu.bme.aut.android.mybookshelves.network.BooksDataHolder
 import hu.bme.aut.android.mybookshelves.databinding.ActivityBooklistBinding
 import hu.bme.aut.android.mybookshelves.feature.bookdetails.DetailsActivity
-import hu.bme.aut.android.mybookshelves.model.BooksResponse
-import hu.bme.aut.android.mybookshelves.model.Resource
+import hu.bme.aut.android.mybookshelves.model.api.BooksResponse
+import hu.bme.aut.android.mybookshelves.model.api.Resource
+import hu.bme.aut.android.mybookshelves.model.db.Book
 import hu.bme.aut.android.mybookshelves.network.NetworkManager
 import retrofit2.Call
 import retrofit2.Callback
@@ -19,12 +20,12 @@ import retrofit2.Response
 class BookListActivity : AppCompatActivity(), BooksDataHolder, BookAdapter.OnBookSelectedListener {
     companion object {
         private const val TAG = "BooklistActivity"
+        private const val resultsPerPage = 10
     }
-    private var booksData: BooksResponse? = null
+    private var booksData: List<Book>? = null
     private lateinit var binding: ActivityBooklistBinding
     private lateinit var adapter: BookAdapter
     private var startIndex = 0
-    private val resultsPerPage = 10
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +53,7 @@ class BookListActivity : AppCompatActivity(), BooksDataHolder, BookAdapter.OnBoo
         binding.mainRecyclerView.adapter = adapter
     }
 
-    override fun getBooksData(): BooksResponse? {
+    override fun getBooksData(): List<Book>? {
         return booksData
     }
 
@@ -85,16 +86,18 @@ class BookListActivity : AppCompatActivity(), BooksDataHolder, BookAdapter.OnBoo
 
     private fun displayBooksData(receivedBooksData: BooksResponse?, replace: Boolean) {
         Log.d("response", receivedBooksData.toString())
-        booksData = receivedBooksData
+        booksData = receivedBooksData?.items?.map { Book.bookFromResource(it) }
         if (booksData != null) {
-            adapter.addBooks(booksData!!.items, replace)
+            adapter.addBooks(booksData!!, replace)
         }
     }
 
-    override fun onBookSelected(book: Resource?) {
+    override fun onBookSelected(book: Book?) {
         val showDetailsIntent = Intent()
         showDetailsIntent.setClass(this, DetailsActivity::class.java)
-        showDetailsIntent.putExtra(DetailsActivity.EXTRA_BOOK, book?.id)
+        val bundle = Bundle()
+        bundle.putSerializable(DetailsActivity.EXTRA_BOOK, book)
+        showDetailsIntent.putExtras(bundle)
         startActivity(showDetailsIntent)
     }
 }

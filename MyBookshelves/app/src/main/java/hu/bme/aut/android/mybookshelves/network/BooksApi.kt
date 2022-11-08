@@ -1,7 +1,7 @@
 package hu.bme.aut.android.mybookshelves.network
 
-import hu.bme.aut.android.mybookshelves.model.BooksResponse
-import hu.bme.aut.android.mybookshelves.model.Resource
+import hu.bme.aut.android.mybookshelves.model.api.BooksResponse
+import hu.bme.aut.android.mybookshelves.model.api.Resource
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

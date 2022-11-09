@@ -23,8 +23,8 @@ object NetworkManager {
         booksApi = retrofit.create(BooksApi::class.java)
     }
 
-    fun getBooks(q: String?, i: Int = 0): Call<BooksResponse?>? {
-        return booksApi.getBooks(q, i, apiKey = APP_ID)
+    fun getBooks(q: String?): Call<BooksResponse?>? {
+        return booksApi.getBooks(q, apiKey = APP_ID)
     }
 
     fun getBook(volumeId: String): Call<Resource?>? {

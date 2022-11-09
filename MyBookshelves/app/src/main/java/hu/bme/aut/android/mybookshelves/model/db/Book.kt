@@ -6,7 +6,7 @@ import java.io.Serializable
 data class Book (
     val id: String?,
     val title: String?,
-    val authors: List<String>?,
+    val authors: String?,
     val publishedDate: String?,
     val thumbnail: String?,
     val previewLink: String?,
@@ -16,7 +16,7 @@ data class Book (
             return Book(
                 id = res.id,
                 title = res.volumeInfo?.title,
-                authors = res.volumeInfo?.authors,
+                authors = res.volumeInfo?.authors?.joinToString(", "),
                 publishedDate = res.volumeInfo?.publishedDate,
                 thumbnail = res.volumeInfo?.imageLinks?.thumbnail ?: res.volumeInfo?.imageLinks?.smallThumbnail,
                 previewLink = res.volumeInfo?.previewLink

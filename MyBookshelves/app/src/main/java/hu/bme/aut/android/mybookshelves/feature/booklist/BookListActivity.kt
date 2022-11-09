@@ -58,7 +58,7 @@ class BookListActivity : AppCompatActivity(), BooksDataHolder, BookAdapter.OnBoo
     }
 
     private fun loadBooksData(query: String) {
-        NetworkManager.getBooks(query, startIndex)?.enqueue(object : Callback<BooksResponse?> {
+        NetworkManager.getBooks(query)?.enqueue(object : Callback<BooksResponse?> {
             override fun onResponse(
                 call: Call<BooksResponse?>,
                 response: Response<BooksResponse?>
@@ -88,11 +88,11 @@ class BookListActivity : AppCompatActivity(), BooksDataHolder, BookAdapter.OnBoo
         Log.d("response", receivedBooksData.toString())
         booksData = receivedBooksData?.items?.map { Book.bookFromResource(it) }
         if (booksData != null) {
-            adapter.addBooks(booksData!!, replace)
+            adapter.addBooks(booksData!!)
         }
     }
 
-    override fun onBookSelected(book: Book?) {
+    override fun onBookSelected(book: Book) {
         val showDetailsIntent = Intent()
         showDetailsIntent.setClass(this, DetailsActivity::class.java)
         val bundle = Bundle()

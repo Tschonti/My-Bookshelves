@@ -12,7 +12,7 @@ class BookAdapter(private val listener: OnBookSelectedListener) : RecyclerView.A
     private var books: MutableList<Book> = mutableListOf()
 
     interface OnBookSelectedListener {
-        fun onBookSelected(book: Book?)
+        fun onBookSelected(book: Book)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder = BookViewHolder(
@@ -30,10 +30,8 @@ class BookAdapter(private val listener: OnBookSelectedListener) : RecyclerView.A
     override fun getItemCount(): Int = books.size
 
     @SuppressLint("NotifyDataSetChanged")
-    fun addBooks(newBooks: List<Book>, replace: Boolean) {
-        if (replace) {
-            books.clear()
-        }
+    fun addBooks(newBooks: List<Book>) {
+        books.clear()
         books.addAll(newBooks)
         notifyDataSetChanged()
     }

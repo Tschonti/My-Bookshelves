@@ -11,8 +11,12 @@ interface BookDao {
     @Query("SELECT * FROM book WHERE bookId = :bookId LIMIT 1")
     fun findById(bookId: String): BookWithShelves
 
+    @Transaction
+    @Query("SELECT * FROM book WHERE googleId = :bookId LIMIT 1")
+    fun findByGoogleId(bookId: String): BookWithShelves
+
     @Insert
-    fun insert(book: Book)
+    fun insert(book: Book): Long
 
     @Delete
     fun delete(book: Book)

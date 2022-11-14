@@ -10,12 +10,15 @@ interface ShelfDao {
     @Query("SELECT * FROM bookshelf")
     fun getAll(): List<ShelfWithBooks>
 
+    @Query("SELECT * FROM bookshelf")
+    fun getAllWithoutBooks(): List<Bookshelf>
+
     @Transaction
     @Query("SELECT * FROM bookshelf WHERE shelfId = :shelfId LIMIT 1")
-    fun findById(shelfId: Int): ShelfWithBooks
+    fun findById(shelfId: Long): ShelfWithBooks
 
     @Insert
-    fun insert(shelf: Bookshelf)
+    fun insert(shelf: Bookshelf): Long
 
     @Delete
     fun delete(shelf: Bookshelf)

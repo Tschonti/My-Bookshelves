@@ -1,6 +1,5 @@
 package hu.bme.aut.android.mybookshelves.feature.booklist
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,10 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import hu.bme.aut.android.mybookshelves.R
 import hu.bme.aut.android.mybookshelves.databinding.FragmentBookListBinding
 import hu.bme.aut.android.mybookshelves.feature.bookdetails.BookDetailsFragment
-import hu.bme.aut.android.mybookshelves.feature.bookdetails.DetailsActivity
 import hu.bme.aut.android.mybookshelves.model.api.BooksResponse
 import hu.bme.aut.android.mybookshelves.model.db.Book
-import hu.bme.aut.android.mybookshelves.model.db.Bookshelf
 import hu.bme.aut.android.mybookshelves.model.db.ShelfWithBooks
 import hu.bme.aut.android.mybookshelves.network.NetworkManager
 import retrofit2.Call

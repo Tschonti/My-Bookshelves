@@ -10,6 +10,7 @@ data class VolumeInfo(
     val maturityRating: String?,
     val allowAnonLogging: Boolean?,
     val contentVersion: String?,
+    val description: String?,
     val panelizationSummary: PanelizationSummary?,
     val imageLinks: ImageLinks?,
     val previewLink: String?,

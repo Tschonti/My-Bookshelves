@@ -3,12 +3,18 @@
     <string name="search">Search</string>
     <string name="searchButtonEmoji">🔍</string>
     <string name="more_results">More results</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search_menu">Search</string>
     <string name="selves_menu">Bookshelves</string>
     <string name="new_shelf_hint">Shelf name</string>
     <string name="new_shelf">New bookshelf</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="my_bookshelves">My Bookshelves</string>
+    <string name="add_bookshelf">Add Bookshelf</string>
+    <string name="book_thumbnail">Book thumbnail</string>
+    <string name="add_to_shelf">Add to shelf</string>
+    <string name="published">Published: %1$s</string>
+    <string name="book_count">%d book(s)</string>
+    <string name="delete">Delete</string>
+    <string name="add_to_shelves">Add to bookshelves</string>
 </resources>

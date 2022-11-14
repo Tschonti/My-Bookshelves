@@ -1,16 +1,24 @@
 package hu.bme.aut.android.mybookshelves.feature.bookdetails
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import hu.bme.aut.android.mybookshelves.R
 import hu.bme.aut.android.mybookshelves.databinding.FragmentBookDetailsBinding
 import hu.bme.aut.android.mybookshelves.databinding.FragmentBookListBinding
+import hu.bme.aut.android.mybookshelves.feature.bookshelves.AddShelfDialogFragment
 import hu.bme.aut.android.mybookshelves.model.db.Book
+import hu.bme.aut.android.mybookshelves.model.db.BookInShelf
+import hu.bme.aut.android.mybookshelves.model.db.Bookshelf
+import hu.bme.aut.android.mybookshelves.sqlite.AppDatabase
+import kotlin.concurrent.thread
 
-class BookDetailsFragment : Fragment() {
+class BookDetailsFragment : Fragment(), AddToShelfDialogFragment.AddToShelfDialogListener {
     private lateinit var binding: FragmentBookDetailsBinding
     private var book: Book? = null
 
@@ -45,6 +53,28 @@ class BookDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.titleText.text = book?.title
         binding.authorText.text = book?.authors
+        binding.descriptionText.text = book?.description
+        binding.publishedText.text = context?.getString(R.string.published, book?.publishedDate)
+        if (book?.thumbnail != null) {
+            Glide.with(this)
+                .load(book?.thumbnail?.replace("http://", "https://"))
+                .into(binding.thumbnail)
+        }
+        binding.addToShelfBtn.setOnClickListener {
+            AddToShelfDialogFragment().show(childFragmentManager, AddToShelfDialogFragment::class.java.simpleName)
+        }
+
+
+    }
+
+    override fun onBookToShelvesAdded(shelves: Set<Bookshelf>) {
+        thread {
+            if (book != null) {
+                val id = AppDatabase.getInstance(requireContext()).bookDao().insert(book!!)
+                AppDatabase.getInstance(requireContext()).bookInShelfDao().insertAll(shelves.map { BookInShelf(id, it.shelfId) })
+
+            }
+        }
     }
 
 

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import hu.bme.aut.android.mybookshelves.databinding.ItemBookBinding
-import hu.bme.aut.android.mybookshelves.model.api.Resource
 import hu.bme.aut.android.mybookshelves.model.db.Book
 
 class BookAdapter(private val listener: OnBookSelectedListener) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {

@@ -15,7 +15,7 @@ class AddShelfDialogFragment : AppCompatDialogFragment() {
     private lateinit var listener: AddShelfDialogListener
 
     interface AddShelfDialogListener {
-        fun onShelfAdded(shelfName: String?)
+        fun onShelfAdded(shelfName: String)
     }
 
     override fun onAttach(context: Context) {

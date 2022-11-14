@@ -17,6 +17,7 @@ import hu.bme.aut.android.mybookshelves.feature.bookdetails.DetailsActivity
 import hu.bme.aut.android.mybookshelves.model.api.BooksResponse
 import hu.bme.aut.android.mybookshelves.model.db.Book
 import hu.bme.aut.android.mybookshelves.model.db.Bookshelf
+import hu.bme.aut.android.mybookshelves.model.db.ShelfWithBooks
 import hu.bme.aut.android.mybookshelves.network.NetworkManager
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,7 +25,7 @@ import retrofit2.Response
 
 class BookListFragment : Fragment(), BookAdapter.OnBookSelectedListener {
     private lateinit var binding: FragmentBookListBinding
-    private var shelf: Bookshelf? = null
+    private var shelf: ShelfWithBooks? = null
     private lateinit var adapter: BookAdapter
 
     companion object {
@@ -32,7 +33,7 @@ class BookListFragment : Fragment(), BookAdapter.OnBookSelectedListener {
         private const val TAG = "BOOKLIST_FRAGMENT"
 
         @JvmStatic
-        fun newInstance(shelf: Bookshelf) =
+        fun newInstance(shelf: ShelfWithBooks) =
             BookListFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable(PARAM_BOOKSHELF, shelf)
@@ -43,7 +44,7 @@ class BookListFragment : Fragment(), BookAdapter.OnBookSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            shelf = it.getSerializable(PARAM_BOOKSHELF) as Bookshelf
+            shelf = it.getSerializable(PARAM_BOOKSHELF) as ShelfWithBooks
         }
     }
 
@@ -110,7 +111,7 @@ class BookListFragment : Fragment(), BookAdapter.OnBookSelectedListener {
         Log.d("response", receivedBooksData.toString())
         val booksData = receivedBooksData?.items?.map { Book.bookFromResource(it) }
         if (booksData != null) {
-            adapter.addBooks(booksData!!)
+            adapter.addBooks(booksData)
         }
     }
 

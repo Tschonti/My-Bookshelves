@@ -1,10 +1,13 @@
 package hu.bme.aut.android.mybookshelves.model.db
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import hu.bme.aut.android.mybookshelves.model.api.Resource
 import java.io.Serializable
 
+@Entity
 data class Book (
-    val id: String?,
+    @PrimaryKey val bookId: String,
     val title: String?,
     val authors: String?,
     val publishedDate: String?,
@@ -14,7 +17,7 @@ data class Book (
     companion object {
         fun bookFromResource(res: Resource): Book {
             return Book(
-                id = res.id,
+                bookId = res.id,
                 title = res.volumeInfo?.title,
                 authors = res.volumeInfo?.authors?.joinToString(", "),
                 publishedDate = res.volumeInfo?.publishedDate,

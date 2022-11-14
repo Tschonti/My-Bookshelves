@@ -26,6 +26,6 @@ class DetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
         book = intent.extras?.getSerializable(EXTRA_BOOK) as Book
         binding.titleText.text = book?.title
-        binding.authorText.text = book?.authors?.joinToString(", ")
+        binding.authorText.text = book?.authors
     }
 }

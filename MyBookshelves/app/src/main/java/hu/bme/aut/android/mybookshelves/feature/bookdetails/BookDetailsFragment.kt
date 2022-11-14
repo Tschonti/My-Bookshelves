@@ -44,7 +44,7 @@ class BookDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.titleText.text = book?.title
-        binding.authorText.text = book?.authors?.joinToString(", ")
+        binding.authorText.text = book?.authors
     }
 
 

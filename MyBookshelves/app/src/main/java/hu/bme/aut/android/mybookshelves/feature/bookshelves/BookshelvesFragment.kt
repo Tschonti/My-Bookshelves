@@ -6,7 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.room.Room
 import hu.bme.aut.android.mybookshelves.databinding.FragmentBookshelvesBinding
+import hu.bme.aut.android.mybookshelves.model.db.Bookshelf
+import hu.bme.aut.android.mybookshelves.sqlite.AppDatabase
+import kotlin.concurrent.thread
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -68,8 +72,14 @@ class BookshelvesFragment : Fragment(), AddShelfDialogFragment.AddShelfDialogLis
             }
     }
 
-    override fun onShelfAdded(shelfName: String?) {
+    override fun onShelfAdded(shelfName: String) {
         Log.d("SHELF", shelfName ?: "nincs :(")
+        Thread {
+            val db = AppDatabase.getInstance(requireContext())
+            db.shelfDao().insert(Bookshelf(name = shelfName))
+            val shelves = db.shelfDao().getAll()
+            Log.d("SHEEELVES", shelves.toString())
+        }.start()
     }
 
 }

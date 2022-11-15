@@ -6,14 +6,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import hu.bme.aut.android.mybookshelves.databinding.ItemShelfInDialogBinding
-import hu.bme.aut.android.mybookshelves.model.db.Bookshelf
+import hu.bme.aut.android.mybookshelves.model.db.ShelfWithBooks
 
 class ShelvesToAddAdapter(private val listener: OnShelfCheckedListener) : RecyclerView.Adapter<ShelvesToAddAdapter.ShelfToAddViewHolder>() {
-    private var shelves: MutableList<Bookshelf> = mutableListOf()
+    private var shelves: MutableList<Pair<ShelfWithBooks, Boolean>> = mutableListOf()
 
     interface OnShelfCheckedListener {
-        fun onShelfSelected(shelf: Bookshelf)
-        fun onShelfDeSelected(shelf: Bookshelf)
+        fun onShelfSelected(shelf: ShelfWithBooks)
+        fun onShelfDeSelected(shelf: ShelfWithBooks)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShelfToAddViewHolder = ShelfToAddViewHolder(
@@ -22,17 +22,17 @@ class ShelvesToAddAdapter(private val listener: OnShelfCheckedListener) : Recycl
 
     override fun onBindViewHolder(holder: ShelfToAddViewHolder, position: Int) {
         val item = shelves[position]
-        Log.d("adapter", item.name)
-        holder.binding.ShelfItemTitleTextView.text = item.name
+        holder.binding.ShelfItemTitleTextView.text = item.first.shelf.name
+        holder.binding.shelfItemCheckbox.isChecked = item.second
         holder.binding.shelfItemCheckbox.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) listener.onShelfSelected(item) else listener.onShelfDeSelected(item)
+            if (isChecked) listener.onShelfSelected(item.first) else listener.onShelfDeSelected(item.first)
         }
     }
 
     override fun getItemCount(): Int = shelves.size
 
     @SuppressLint("NotifyDataSetChanged")
-    fun replaceShelves(newShelves: List<Bookshelf>) {
+    fun replaceShelves(newShelves: List<Pair<ShelfWithBooks, Boolean>>) {
         shelves.clear()
         shelves.addAll(newShelves)
         notifyDataSetChanged()

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import hu.bme.aut.android.mybookshelves.R
 import hu.bme.aut.android.mybookshelves.databinding.ItemShelfBinding
 import hu.bme.aut.android.mybookshelves.model.db.ShelfWithBooks
 import hu.bme.aut.android.mybookshelves.sqlite.AppDatabase
@@ -25,7 +26,7 @@ class ShelfAdapter (private val listener: OnShelfSelectedListener) : RecyclerVie
     override fun onBindViewHolder(holder: ShelfViewHolder, position: Int) {
         val item = shelves[position]
         holder.binding.ShelfItemTitleTextView.text = item.shelf.name
-        holder.binding.ShelfItemCountTextView.text = item.books.size.toString()
+        holder.binding.ShelfItemCountTextView.text = holder.binding.root.context.getString(R.string.book_count, item.books.size)
         holder.binding.root.setOnClickListener {
             listener.onShelfSelected(item)
         }

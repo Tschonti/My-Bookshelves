@@ -43,14 +43,14 @@ class BookshelvesFragment : Fragment(), AddShelfDialogFragment.AddShelfDialogLis
     }
 
     override fun onShelfAdded(shelfName: String) {
-        Thread {
+        thread {
             val db = AppDatabase.getInstance(requireContext())
             val newShelfId = db.shelfDao().insert(Bookshelf(name = shelfName))
             val newShelf = db.shelfDao().findById(newShelfId)
             activity?.runOnUiThread {
                 adapter.addShelf(newShelf)
             }
-        }.start()
+        }
     }
 
     override fun onShelfSelected(shelf: ShelfWithBooks) {

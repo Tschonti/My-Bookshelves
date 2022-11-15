@@ -15,6 +15,7 @@ import hu.bme.aut.android.mybookshelves.feature.bookshelves.AddShelfDialogFragme
 import hu.bme.aut.android.mybookshelves.model.db.Book
 import hu.bme.aut.android.mybookshelves.model.db.BookInShelf
 import hu.bme.aut.android.mybookshelves.model.db.Bookshelf
+import hu.bme.aut.android.mybookshelves.model.db.ShelfWithBooks
 import hu.bme.aut.android.mybookshelves.sqlite.AppDatabase
 import kotlin.concurrent.thread
 
@@ -61,17 +62,17 @@ class BookDetailsFragment : Fragment(), AddToShelfDialogFragment.AddToShelfDialo
                 .into(binding.thumbnail)
         }
         binding.addToShelfBtn.setOnClickListener {
-            AddToShelfDialogFragment().show(childFragmentManager, AddToShelfDialogFragment::class.java.simpleName)
+            AddToShelfDialogFragment.newInstance(book!!).show(childFragmentManager, AddToShelfDialogFragment::class.java.simpleName)
         }
 
 
     }
 
-    override fun onBookToShelvesAdded(shelves: Set<Bookshelf>) {
+    override fun onBookToShelvesAdded(shelves: Set<ShelfWithBooks>) {
         thread {
             if (book != null) {
                 val id = AppDatabase.getInstance(requireContext()).bookDao().insert(book!!)
-                AppDatabase.getInstance(requireContext()).bookInShelfDao().insertAll(shelves.map { BookInShelf(id, it.shelfId) })
+                AppDatabase.getInstance(requireContext()).bookInShelfDao().insertAll(shelves.map { BookInShelf(id, it.shelf.shelfId) })
 
             }
         }

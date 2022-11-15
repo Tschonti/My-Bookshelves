@@ -13,6 +13,7 @@ import hu.bme.aut.android.mybookshelves.R
 import hu.bme.aut.android.mybookshelves.databinding.DialogAddToShelfBinding
 import hu.bme.aut.android.mybookshelves.databinding.DialogNewShelfBinding
 import hu.bme.aut.android.mybookshelves.feature.booklist.BookAdapter
+import hu.bme.aut.android.mybookshelves.model.db.Book
 import hu.bme.aut.android.mybookshelves.model.db.Bookshelf
 import hu.bme.aut.android.mybookshelves.model.db.ShelfWithBooks
 import hu.bme.aut.android.mybookshelves.sqlite.AppDatabase
@@ -25,14 +26,26 @@ class AddToShelfDialogFragment : AppCompatDialogFragment(),
     private lateinit var listener: AddToShelfDialogListener
     private lateinit var adapter: ShelvesToAddAdapter
 
-    private val selectedShelves: MutableSet<Bookshelf> = mutableSetOf()
+    private val selectedShelves: MutableSet<ShelfWithBooks> = mutableSetOf()
+    private lateinit var book: Book
+
+    companion object {
+        fun newInstance(book: Book): AddToShelfDialogFragment {
+            val inst = AddToShelfDialogFragment()
+            val args = Bundle()
+            args.putSerializable("BOOK", book)
+            inst.arguments = args
+            return  inst
+        }
+    }
 
     interface AddToShelfDialogListener {
-        fun onBookToShelvesAdded(shelves: Set<Bookshelf>)
+        fun onBookToShelvesAdded(shelves: Set<ShelfWithBooks>)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        book = arguments?.getSerializable("BOOK") as Book
         binding = DialogAddToShelfBinding.inflate(LayoutInflater.from(context))
         adapter = ShelvesToAddAdapter(this)
         binding.shelfListRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -44,10 +57,9 @@ class AddToShelfDialogFragment : AppCompatDialogFragment(),
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         thread {
-            val shelves = AppDatabase.getInstance(requireContext()).shelfDao().getAllWithoutBooks()
+            val shelves = AppDatabase.getInstance(requireContext()).shelfDao().getAll()
             activity?.runOnUiThread {
-                Log.d("DIALOG", "ADDInG to adapter ${shelves.size}")
-                adapter.replaceShelves(shelves)
+                adapter.replaceShelves(shelves.map { Pair(it, it.books.any { bookInDb -> bookInDb.googleId == book.googleId}) })
             }
         }
         return AlertDialog.Builder(requireContext())
@@ -62,16 +74,12 @@ class AddToShelfDialogFragment : AppCompatDialogFragment(),
             .create()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
-    }
-
-    override fun onShelfSelected(shelf: Bookshelf) {
+    override fun onShelfSelected(shelf: ShelfWithBooks) {
         selectedShelves.add(shelf)
     }
 
-    override fun onShelfDeSelected(shelf: Bookshelf) {
+    override fun onShelfDeSelected(shelf: ShelfWithBooks) {
         selectedShelves.remove(shelf)
     }
 }

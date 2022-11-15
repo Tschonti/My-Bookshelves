@@ -7,14 +7,15 @@ import java.io.Serializable
 
 @Entity
 data class Book (
-    @PrimaryKey(autoGenerate = true) val bookId: Long = 0,
+    @PrimaryKey(autoGenerate = true) var bookId: Long = 0,
     val googleId: String,
     val title: String?,
     val authors: String?,
     val publishedDate: String?,
     val thumbnail: String?,
     val previewLink: String?,
-    val description: String
+    val description: String,
+    val note: String?
 ) : Serializable {
     companion object {
         fun bookFromResource(res: Resource): Book {
@@ -25,7 +26,8 @@ data class Book (
                 publishedDate = res.volumeInfo?.publishedDate,
                 thumbnail = res.volumeInfo?.imageLinks?.thumbnail ?: res.volumeInfo?.imageLinks?.smallThumbnail,
                 previewLink = res.volumeInfo?.previewLink,
-                description = res.volumeInfo?.description ?: "No description available."
+                description = res.volumeInfo?.description ?: "No description available.",
+                note = null
             )
         }
     }

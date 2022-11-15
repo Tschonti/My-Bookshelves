@@ -14,11 +14,14 @@ import hu.bme.aut.android.mybookshelves.databinding.FragmentBookListBinding
 import hu.bme.aut.android.mybookshelves.feature.bookdetails.BookDetailsFragment
 import hu.bme.aut.android.mybookshelves.model.api.BooksResponse
 import hu.bme.aut.android.mybookshelves.model.db.Book
+import hu.bme.aut.android.mybookshelves.model.db.BookInShelf
 import hu.bme.aut.android.mybookshelves.model.db.ShelfWithBooks
 import hu.bme.aut.android.mybookshelves.network.NetworkManager
+import hu.bme.aut.android.mybookshelves.sqlite.AppDatabase
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.concurrent.thread
 
 class BookListFragment : Fragment(), BookAdapter.OnBookSelectedListener {
     private lateinit var binding: FragmentBookListBinding
@@ -65,17 +68,22 @@ class BookListFragment : Fragment(), BookAdapter.OnBookSelectedListener {
             if (shelf == null) {
                 loadBooksDataFromApi(binding.etSearch.text.toString())
             } else {
-
+                searchInShelf(binding.etSearch.text.toString())
             }
         }
         binding.etSearch.setOnEditorActionListener {_, _, _ ->
             if (shelf == null) {
                 loadBooksDataFromApi(binding.etSearch.text.toString())
             } else {
-
+                searchInShelf(binding.etSearch.text.toString())
             }
             return@setOnEditorActionListener true
         }
+    }
+
+    private fun searchInShelf(term: String) {
+        adapter.addBooks(shelf?.books?.filter { it.title?.contains(term, ignoreCase = true) ?: false } ?: listOf())
+
     }
 
     private fun loadBooksDataFromApi(query: String) {
@@ -99,7 +107,7 @@ class BookListFragment : Fragment(), BookAdapter.OnBookSelectedListener {
             ) {
                 throwable.printStackTrace()
                 Toast.makeText(context,
-                    "Network request error occured, check LOG", Toast.LENGTH_LONG).show()
+                    "Network request error occurred, check LOG", Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -116,5 +124,17 @@ class BookListFragment : Fragment(), BookAdapter.OnBookSelectedListener {
         val bundle = Bundle()
         bundle.putSerializable(BookDetailsFragment.PARAM_BOOK, book)
         findNavController().navigate(R.id.action_bookListFragment_to_bookDetailsFragment, bundle)
+    }
+
+    override fun onBookDeleted(book: Book) {
+        if (shelf != null) {
+            thread {
+                AppDatabase.getInstance(requireContext()).bookInShelfDao().delete(BookInShelf(book.bookId, shelf!!.shelf.shelfId))
+                activity?.runOnUiThread {
+                    adapter.removeBook(book)
+                }
+            }
+
+        }
     }
 }

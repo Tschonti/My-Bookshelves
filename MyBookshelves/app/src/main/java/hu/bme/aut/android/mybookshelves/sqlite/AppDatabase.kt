@@ -8,7 +8,7 @@ import hu.bme.aut.android.mybookshelves.model.db.Book
 import hu.bme.aut.android.mybookshelves.model.db.BookInShelf
 import hu.bme.aut.android.mybookshelves.model.db.Bookshelf
 
-@Database(entities = [Book::class, Bookshelf::class, BookInShelf::class], version = 4)
+@Database(entities = [Book::class, Bookshelf::class, BookInShelf::class], version = 5)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun bookDao(): BookDao
     abstract fun shelfDao(): ShelfDao

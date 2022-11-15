@@ -1,12 +1,15 @@
 package hu.bme.aut.android.mybookshelves.feature.bookdetails
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import hu.bme.aut.android.mybookshelves.R
 import hu.bme.aut.android.mybookshelves.databinding.FragmentBookDetailsBinding
@@ -19,7 +22,7 @@ import hu.bme.aut.android.mybookshelves.model.db.ShelfWithBooks
 import hu.bme.aut.android.mybookshelves.sqlite.AppDatabase
 import kotlin.concurrent.thread
 
-class BookDetailsFragment : Fragment(), AddToShelfDialogFragment.AddToShelfDialogListener {
+class BookDetailsFragment : Fragment(), AddToShelfDialogFragment.AddToShelfDialogListener, AddNoteDialog.AddNoteDialogListener {
     private lateinit var binding: FragmentBookDetailsBinding
     private var book: Book? = null
 
@@ -64,8 +67,21 @@ class BookDetailsFragment : Fragment(), AddToShelfDialogFragment.AddToShelfDialo
         binding.addToShelfBtn.setOnClickListener {
             AddToShelfDialogFragment.newInstance(book!!).show(childFragmentManager, AddToShelfDialogFragment::class.java.simpleName)
         }
-
-
+        if (book?.previewLink != null) {
+            binding.moreInfoBtn.setOnClickListener {
+                val uri = Uri.parse(book?.previewLink)
+                startActivity(Intent(Intent.ACTION_VIEW, uri))
+            }
+        }
+        if (book?.bookId == 0L) {
+            binding.addNoteBtn.isVisible = false
+        }
+        binding.addNoteBtn.setOnClickListener {
+            AddNoteDialog().show(
+                childFragmentManager,
+                AddNoteDialog::class.java.simpleName
+            )
+        }
     }
 
     override fun onBookToShelvesAdded(shelves: Set<ShelfWithBooks>) {
@@ -74,8 +90,24 @@ class BookDetailsFragment : Fragment(), AddToShelfDialogFragment.AddToShelfDialo
                 var id = book?.bookId ?: 0
                 if (id  == 0L) {
                     id = AppDatabase.getInstance(requireContext()).bookDao().insert(book!!)
+                    book!!.bookId = id
                 }
+                AppDatabase.getInstance(requireContext()).bookInShelfDao().deleteByBookId(id)
                 AppDatabase.getInstance(requireContext()).bookInShelfDao().insertAll(shelves.map { BookInShelf(id, it.shelf.shelfId) })
+                activity?.runOnUiThread {
+                    binding.addNoteBtn.isVisible = true
+                }
+            }
+        }
+    }
+
+    override fun onNoteAdded(note: String) {
+        if (book?.bookId != 0L) {
+            thread {
+                AppDatabase.getInstance(requireContext()).bookDao().addNote(book!!.bookId, note)
+                activity?.runOnUiThread {
+                    binding.noteText.text = note
+                }
             }
         }
     }

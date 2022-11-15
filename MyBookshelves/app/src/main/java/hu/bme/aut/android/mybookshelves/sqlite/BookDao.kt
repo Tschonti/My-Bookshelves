@@ -18,6 +18,9 @@ interface BookDao {
     @Insert
     fun insert(book: Book): Long
 
+    @Query("UPDATE book SET note = :note WHERE bookId = :bookId")
+    fun addNote(bookId: Long, note: String)
+
     @Delete
     fun delete(book: Book)
 }

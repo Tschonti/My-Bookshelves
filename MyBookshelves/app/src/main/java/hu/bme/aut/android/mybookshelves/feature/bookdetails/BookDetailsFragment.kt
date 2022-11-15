@@ -71,9 +71,11 @@ class BookDetailsFragment : Fragment(), AddToShelfDialogFragment.AddToShelfDialo
     override fun onBookToShelvesAdded(shelves: Set<ShelfWithBooks>) {
         thread {
             if (book != null) {
-                val id = AppDatabase.getInstance(requireContext()).bookDao().insert(book!!)
+                var id = book?.bookId ?: 0
+                if (id  == 0L) {
+                    id = AppDatabase.getInstance(requireContext()).bookDao().insert(book!!)
+                }
                 AppDatabase.getInstance(requireContext()).bookInShelfDao().insertAll(shelves.map { BookInShelf(id, it.shelf.shelfId) })
-
             }
         }
     }

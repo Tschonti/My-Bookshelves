@@ -1,20 +1,22 @@
 package hu.bme.aut.android.mybookshelves.feature.bookshelves
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
+import hu.bme.aut.android.mybookshelves.R
 import hu.bme.aut.android.mybookshelves.databinding.FragmentBookshelvesBinding
+import hu.bme.aut.android.mybookshelves.feature.booklist.BookListFragment
 import hu.bme.aut.android.mybookshelves.model.db.Bookshelf
 import hu.bme.aut.android.mybookshelves.model.db.ShelfWithBooks
 import hu.bme.aut.android.mybookshelves.sqlite.AppDatabase
 import kotlin.concurrent.thread
 
-class BookshelvesFragment : Fragment(), AddShelfDialogFragment.AddShelfDialogListener, ShelfAdapter.OnShelfSelectedListener {
+class BookshelvesFragment : Fragment(), AddShelfDialogFragment.AddShelfDialogListener,
+    ShelfAdapter.OnShelfSelectedListener {
     private lateinit var binding: FragmentBookshelvesBinding
     private lateinit var adapter: ShelfAdapter
 
@@ -32,7 +34,10 @@ class BookshelvesFragment : Fragment(), AddShelfDialogFragment.AddShelfDialogLis
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.fab.setOnClickListener {
-            AddShelfDialogFragment().show(childFragmentManager, AddShelfDialogFragment::class.java.simpleName)
+            AddShelfDialogFragment().show(
+                childFragmentManager,
+                AddShelfDialogFragment::class.java.simpleName
+            )
         }
         thread {
             val shelves = AppDatabase.getInstance(requireContext()).shelfDao().getAll()
@@ -54,7 +59,9 @@ class BookshelvesFragment : Fragment(), AddShelfDialogFragment.AddShelfDialogLis
     }
 
     override fun onShelfSelected(shelf: ShelfWithBooks) {
-        //TODO("Not yet implemented")
+        val bundle = Bundle()
+        bundle.putSerializable(BookListFragment.PARAM_BOOKSHELF, shelf)
+        findNavController().navigate(R.id.action_bookshelvesFragment_to_bookListFragment, bundle)
     }
 
 }

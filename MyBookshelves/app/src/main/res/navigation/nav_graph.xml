@@ -28,5 +28,9 @@
     <fragment
         android:id="@+id/bookshelvesFragment"
         android:name="hu.bme.aut.android.mybookshelves.feature.bookshelves.BookshelvesFragment"
-        android:label="BookshelvesFragment" />
+        android:label="BookshelvesFragment" >
+        <action
+            android:id="@+id/action_bookshelvesFragment_to_bookListFragment"
+            app:destination="@id/bookListFragment" />
+    </fragment>
 </navigation>

@@ -15,16 +15,18 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun bookInShelfDao(): BookInShelfDao
 
     companion object {
-        @Volatile private var instance: AppDatabase? = null
+        @Volatile
+        private var instance: AppDatabase? = null
 
         fun getInstance(context: Context): AppDatabase {
             return instance ?: synchronized(this) {
                 instance ?: buildDatabase(context.applicationContext).also { instance = it }
             }
         }
-        
+
         private fun buildDatabase(context: Context): AppDatabase {
-            return Room.databaseBuilder(context, AppDatabase::class.java, "bookshelves-db").fallbackToDestructiveMigration()
+            return Room.databaseBuilder(context, AppDatabase::class.java, "bookshelves-db")
+                .fallbackToDestructiveMigration()
                 .build()
         }
     }

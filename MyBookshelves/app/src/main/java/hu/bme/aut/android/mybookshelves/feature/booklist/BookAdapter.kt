@@ -7,10 +7,9 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import hu.bme.aut.android.mybookshelves.databinding.ItemBookBinding
 import hu.bme.aut.android.mybookshelves.model.db.Book
-import hu.bme.aut.android.mybookshelves.sqlite.AppDatabase
-import kotlin.concurrent.thread
 
-class BookAdapter(private val listener: OnBookSelectedListener) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
+class BookAdapter(private val listener: OnBookSelectedListener) :
+    RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
     private var books: MutableList<Book> = mutableListOf()
 
     interface OnBookSelectedListener {
@@ -18,9 +17,10 @@ class BookAdapter(private val listener: OnBookSelectedListener) : RecyclerView.A
         fun onBookDeleted(book: Book)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder = BookViewHolder(
-        ItemBookBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-    )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder =
+        BookViewHolder(
+            ItemBookBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        )
 
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
         val item = books[position]

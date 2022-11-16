@@ -26,4 +26,5 @@
     <string name="book_s_found">%d book(s) found</string>
     <string name="title">Search the web</string>
     <string name="formatted_title">Search in %s</string>
+    <string name="no_shelves">You don\'t have any shelves</string>
 </resources>

@@ -4,17 +4,12 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import hu.bme.aut.android.mybookshelves.R
 import hu.bme.aut.android.mybookshelves.databinding.DialogAddToShelfBinding
-import hu.bme.aut.android.mybookshelves.databinding.DialogNewShelfBinding
-import hu.bme.aut.android.mybookshelves.feature.booklist.BookAdapter
 import hu.bme.aut.android.mybookshelves.model.db.Book
-import hu.bme.aut.android.mybookshelves.model.db.Bookshelf
 import hu.bme.aut.android.mybookshelves.model.db.ShelfWithBooks
 import hu.bme.aut.android.mybookshelves.sqlite.AppDatabase
 import kotlin.concurrent.thread
@@ -35,7 +30,7 @@ class AddToShelfDialogFragment : AppCompatDialogFragment(),
             val args = Bundle()
             args.putSerializable("BOOK", book)
             inst.arguments = args
-            return  inst
+            return inst
         }
     }
 
@@ -59,7 +54,11 @@ class AddToShelfDialogFragment : AppCompatDialogFragment(),
         thread {
             val shelves = AppDatabase.getInstance(requireContext()).shelfDao().getAll()
             activity?.runOnUiThread {
-                adapter.replaceShelves(shelves.map { Pair(it, it.books.any { bookInDb -> bookInDb.googleId == book.googleId}) })
+                adapter.replaceShelves(shelves.map {
+                    Pair(
+                        it,
+                        it.books.any { bookInDb -> bookInDb.googleId == book.googleId })
+                })
             }
         }
         return AlertDialog.Builder(requireContext())

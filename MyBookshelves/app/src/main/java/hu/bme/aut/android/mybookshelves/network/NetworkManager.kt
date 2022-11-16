@@ -1,7 +1,6 @@
 package hu.bme.aut.android.mybookshelves.network
 
 import hu.bme.aut.android.mybookshelves.model.api.BooksResponse
-import hu.bme.aut.android.mybookshelves.model.api.Resource
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -25,9 +24,5 @@ object NetworkManager {
 
     fun getBooks(q: String?): Call<BooksResponse?>? {
         return booksApi.getBooks(q, apiKey = APP_ID)
-    }
-
-    fun getBook(volumeId: String): Call<Resource?>? {
-        return booksApi.getBook(volumeId, apiKey = APP_ID)
     }
 }

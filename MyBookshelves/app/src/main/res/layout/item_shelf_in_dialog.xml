@@ -12,11 +12,13 @@
         android:id="@+id/ShelfItemTitleTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:layout_weight="2"
         android:text="" />
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:buttonTint="@color/purple_700"
         android:id="@+id/shelfItemCheckbox" />
 </LinearLayout>

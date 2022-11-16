@@ -6,7 +6,6 @@ import hu.bme.aut.android.mybookshelves.model.db.BookWithShelves
 
 @Dao
 interface BookDao {
-
     @Transaction
     @Query("SELECT * FROM book WHERE bookId = :bookId LIMIT 1")
     fun findById(bookId: String): BookWithShelves

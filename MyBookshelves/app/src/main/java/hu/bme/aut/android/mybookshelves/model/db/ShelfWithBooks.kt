@@ -1,6 +1,5 @@
 package hu.bme.aut.android.mybookshelves.model.db
 
-import androidx.room.Dao
 import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation

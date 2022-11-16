@@ -1,14 +1,14 @@
 package hu.bme.aut.android.mybookshelves.feature.bookdetails
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import hu.bme.aut.android.mybookshelves.databinding.ItemShelfInDialogBinding
 import hu.bme.aut.android.mybookshelves.model.db.ShelfWithBooks
 
-class ShelvesToAddAdapter(private val listener: OnShelfCheckedListener) : RecyclerView.Adapter<ShelvesToAddAdapter.ShelfToAddViewHolder>() {
+class ShelvesToAddAdapter(private val listener: OnShelfCheckedListener) :
+    RecyclerView.Adapter<ShelvesToAddAdapter.ShelfToAddViewHolder>() {
     private var shelves: MutableList<Pair<ShelfWithBooks, Boolean>> = mutableListOf()
 
     interface OnShelfCheckedListener {
@@ -16,9 +16,10 @@ class ShelvesToAddAdapter(private val listener: OnShelfCheckedListener) : Recycl
         fun onShelfDeSelected(shelf: ShelfWithBooks)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShelfToAddViewHolder = ShelfToAddViewHolder(
-        ItemShelfInDialogBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-    )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShelfToAddViewHolder =
+        ShelfToAddViewHolder(
+            ItemShelfInDialogBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        )
 
     override fun onBindViewHolder(holder: ShelfToAddViewHolder, position: Int) {
         val item = shelves[position]
@@ -28,7 +29,9 @@ class ShelvesToAddAdapter(private val listener: OnShelfCheckedListener) : Recycl
             if (isChecked) listener.onShelfSelected(item.first) else listener.onShelfDeSelected(item.first)
         }
         holder.binding.root.setOnClickListener {
-            if (holder.binding.shelfItemCheckbox.isChecked) listener.onShelfSelected(item.first) else listener.onShelfDeSelected(item.first)
+            if (holder.binding.shelfItemCheckbox.isChecked) listener.onShelfSelected(item.first) else listener.onShelfDeSelected(
+                item.first
+            )
             holder.binding.shelfItemCheckbox.isChecked = !holder.binding.shelfItemCheckbox.isChecked
         }
     }
@@ -42,5 +45,6 @@ class ShelvesToAddAdapter(private val listener: OnShelfCheckedListener) : Recycl
         notifyDataSetChanged()
     }
 
-    inner class ShelfToAddViewHolder(val binding: ItemShelfInDialogBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ShelfToAddViewHolder(val binding: ItemShelfInDialogBinding) :
+        RecyclerView.ViewHolder(binding.root)
 }

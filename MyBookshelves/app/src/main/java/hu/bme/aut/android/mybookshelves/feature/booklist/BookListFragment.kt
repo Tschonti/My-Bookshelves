@@ -31,14 +31,6 @@ class BookListFragment : Fragment(), BookAdapter.OnBookSelectedListener {
     companion object {
         const val PARAM_BOOKSHELF = "BOOKSHELF"
         private const val TAG = "BOOKLIST_FRAGMENT"
-
-        @JvmStatic
-        fun newInstance(shelf: ShelfWithBooks) =
-            BookListFragment().apply {
-                arguments = Bundle().apply {
-                    putSerializable(PARAM_BOOKSHELF, shelf)
-                }
-            }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,7 +80,6 @@ class BookListFragment : Fragment(), BookAdapter.OnBookSelectedListener {
     }
 
     override fun onResume() {
-        Log.d("aaa", "onresuuume")
         super.onResume()
         if (binding.etSearch.text.isNotEmpty()) {
             if (shelf == null) {
@@ -103,7 +94,6 @@ class BookListFragment : Fragment(), BookAdapter.OnBookSelectedListener {
         val results = shelf?.books?.filter { it.title?.contains(term, ignoreCase = true) ?: false }
         adapter.addBooks(results ?: listOf())
         binding.resultCount.text = activity?.getString(R.string.book_s_found, results?.size ?: 0)
-
     }
 
     private fun loadBooksDataFromApi(query: String) {
@@ -158,10 +148,10 @@ class BookListFragment : Fragment(), BookAdapter.OnBookSelectedListener {
                 activity?.runOnUiThread {
                     adapter.removeBook(book)
                     shelf?.books?.remove(book)
-                    binding.resultCount.text = activity?.getString(R.string.book_s_found, adapter.itemCount)
+                    binding.resultCount.text =
+                        activity?.getString(R.string.book_s_found, adapter.itemCount)
                 }
             }
-
         }
     }
 }

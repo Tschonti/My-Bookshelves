@@ -71,7 +71,7 @@ class BookListFragment : Fragment(), BookAdapter.OnBookSelectedListener {
                 searchInShelf(binding.etSearch.text.toString())
             }
         }
-        binding.etSearch.setOnEditorActionListener {_, _, _ ->
+        binding.etSearch.setOnEditorActionListener { _, _, _ ->
             if (shelf == null) {
                 loadBooksDataFromApi(binding.etSearch.text.toString())
             } else {
@@ -79,10 +79,30 @@ class BookListFragment : Fragment(), BookAdapter.OnBookSelectedListener {
             }
             return@setOnEditorActionListener true
         }
+        binding.resultCount.text =
+            activity?.getString(R.string.book_s_found, if (shelf == null) 0 else shelf!!.books.size)
+
+        if (shelf != null) {
+            binding.title.text = activity?.getString(R.string.formatted_title, shelf!!.shelf.name)
+        }
+    }
+
+    override fun onResume() {
+        Log.d("aaa", "onresuuume")
+        super.onResume()
+        if (binding.etSearch.text.isNotEmpty()) {
+            if (shelf == null) {
+                loadBooksDataFromApi(binding.etSearch.text.toString())
+            } else {
+                searchInShelf(binding.etSearch.text.toString())
+            }
+        }
     }
 
     private fun searchInShelf(term: String) {
-        adapter.addBooks(shelf?.books?.filter { it.title?.contains(term, ignoreCase = true) ?: false } ?: listOf())
+        val results = shelf?.books?.filter { it.title?.contains(term, ignoreCase = true) ?: false }
+        adapter.addBooks(results ?: listOf())
+        binding.resultCount.text = activity?.getString(R.string.book_s_found, results?.size ?: 0)
 
     }
 
@@ -97,7 +117,8 @@ class BookListFragment : Fragment(), BookAdapter.OnBookSelectedListener {
                     binding.moreResultsButton.isEnabled = true
                     displayBooksData(response.body())
                 } else {
-                    Toast.makeText(context, "Error: " + response.message(), Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "Error: " + response.message(), Toast.LENGTH_LONG)
+                        .show()
                 }
             }
 
@@ -106,8 +127,10 @@ class BookListFragment : Fragment(), BookAdapter.OnBookSelectedListener {
                 throwable: Throwable
             ) {
                 throwable.printStackTrace()
-                Toast.makeText(context,
-                    "Network request error occurred, check LOG", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    "Network request error occurred, check LOG", Toast.LENGTH_LONG
+                ).show()
             }
         })
     }
@@ -118,6 +141,7 @@ class BookListFragment : Fragment(), BookAdapter.OnBookSelectedListener {
         if (booksData != null) {
             adapter.addBooks(booksData)
         }
+        binding.resultCount.text = activity?.getString(R.string.book_s_found, booksData?.size ?: 0)
     }
 
     override fun onBookSelected(book: Book) {
@@ -129,9 +153,12 @@ class BookListFragment : Fragment(), BookAdapter.OnBookSelectedListener {
     override fun onBookDeleted(book: Book) {
         if (shelf != null) {
             thread {
-                AppDatabase.getInstance(requireContext()).bookInShelfDao().delete(BookInShelf(book.bookId, shelf!!.shelf.shelfId))
+                AppDatabase.getInstance(requireContext()).bookInShelfDao()
+                    .delete(BookInShelf(book.bookId, shelf!!.shelf.shelfId))
                 activity?.runOnUiThread {
                     adapter.removeBook(book)
+                    shelf?.books?.remove(book)
+                    binding.resultCount.text = activity?.getString(R.string.book_s_found, adapter.itemCount)
                 }
             }
 

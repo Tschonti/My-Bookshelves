@@ -42,6 +42,15 @@ class BookDetailsFragment : Fragment(), AddToShelfDialogFragment.AddToShelfDialo
         super.onCreate(savedInstanceState)
         arguments?.let {
             book = it.getSerializable(PARAM_BOOK) as Book
+            thread {
+                val newBook = AppDatabase.getInstance(requireContext()).bookDao().findByGoogleId(book?.googleId ?: "")
+                if (newBook != null) {
+                    book = newBook.book
+                    /*activity?.runOnUiThread {
+                        binding.addNoteBtn.isVisible = true
+                    }*/
+                }
+            }
         }
     }
 

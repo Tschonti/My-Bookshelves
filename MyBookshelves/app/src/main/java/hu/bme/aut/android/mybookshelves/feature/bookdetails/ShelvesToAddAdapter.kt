@@ -27,6 +27,10 @@ class ShelvesToAddAdapter(private val listener: OnShelfCheckedListener) : Recycl
         holder.binding.shelfItemCheckbox.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) listener.onShelfSelected(item.first) else listener.onShelfDeSelected(item.first)
         }
+        holder.binding.root.setOnClickListener {
+            if (holder.binding.shelfItemCheckbox.isChecked) listener.onShelfSelected(item.first) else listener.onShelfDeSelected(item.first)
+            holder.binding.shelfItemCheckbox.isChecked = !holder.binding.shelfItemCheckbox.isChecked
+        }
     }
 
     override fun getItemCount(): Int = shelves.size

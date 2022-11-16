@@ -13,7 +13,7 @@ interface BookDao {
 
     @Transaction
     @Query("SELECT * FROM book WHERE googleId = :bookId LIMIT 1")
-    fun findByGoogleId(bookId: String): BookWithShelves
+    fun findByGoogleId(bookId: String): BookWithShelves?
 
     @Insert
     fun insert(book: Book): Long

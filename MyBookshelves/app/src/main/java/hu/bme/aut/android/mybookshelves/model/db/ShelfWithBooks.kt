@@ -13,5 +13,5 @@ data class ShelfWithBooks(
         entityColumn = "bookId",
         associateBy = Junction(BookInShelf::class)
     )
-    val books: List<Book>
+    val books: MutableList<Book>
 ) : Serializable

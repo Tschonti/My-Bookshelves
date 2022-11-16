@@ -11,6 +11,9 @@
         android:layout_height="wrap_content"
         android:hint="@string/note_hint"
         android:lines="8"
+        android:minLines="5"
+        android:maxLines="10"
+        android:gravity="top|start"
         android:inputType="text" />
 
 </LinearLayout>

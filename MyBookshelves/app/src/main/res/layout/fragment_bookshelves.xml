@@ -41,6 +41,8 @@
         android:background="@color/purple_700"
         android:contentDescription="@string/add_bookshelf"
         android:src="@drawable/ic_add_white_36dp"
+        app:tint="@color/white"
+        android:backgroundTint="@color/purple_700"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -49,5 +51,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="75dp" />
+        app:layout_constraintGuide_end="60dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

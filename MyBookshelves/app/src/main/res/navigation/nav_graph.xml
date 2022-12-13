@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/bookListFragment">
+
+    <fragment
+        android:id="@+id/bookListFragment"
+        android:name="hu.bme.aut.android.mybookshelves.feature.booklist.BookListFragment"
+        android:label="fragment_book_list"
+        tools:layout="@layout/fragment_book_list" >
+        <action
+            android:id="@+id/action_bookListFragment_to_bookDetailsFragment"
+            app:destination="@id/bookDetailsFragment" />
+        <action
+            android:id="@+id/action_bookListFragment_to_bookshelvesFragment"
+            app:destination="@id/bookshelvesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookDetailsFragment"
+        android:name="hu.bme.aut.android.mybookshelves.feature.bookdetails.BookDetailsFragment"
+        android:label="BookDetailsFragment" >
+        <action
+            android:id="@+id/action_bookDetailsFragment_to_bookshelvesFragment"
+            app:destination="@id/bookshelvesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookshelvesFragment"
+        android:name="hu.bme.aut.android.mybookshelves.feature.bookshelves.BookshelvesFragment"
+        android:label="BookshelvesFragment" >
+        <action
+            android:id="@+id/action_bookshelvesFragment_to_bookListFragment"
+            app:destination="@id/bookListFragment" />
+    </fragment>
+</navigation>

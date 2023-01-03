@@ -11,7 +11,6 @@ object NetworkManager {
     private val booksApi: BooksApi
 
     private const val SERVICE_URL = "https://www.googleapis.com/"
-    private const val APP_ID = "AIzaSyBQyOj9kLKWnaCetZSf8x4synAQBRElyWg"
 
     init {
         retrofit = Retrofit.Builder()
@@ -23,6 +22,6 @@ object NetworkManager {
     }
 
     fun getBooks(q: String?): Call<BooksResponse?>? {
-        return booksApi.getBooks(q, apiKey = APP_ID)
+        return booksApi.getBooks(query=q)
     }
 }

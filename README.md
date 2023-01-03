@@ -1,13 +1,5 @@
-# Házi feladat specifikáció
-
-Információk [itt](https://viauac00.github.io/laborok/hf)
-
-## Mobil- és webes szoftverek
-### 2022.10.18.
-### My bookshelves
-### Fekete Sámuel - (GJ8J3A)
-### feketesamu@gmail.com
-### Laborvezető: Marton István
+# My Bookshelves
+Simple Android app to store books on virtual bookshelves created as a uni assignment. Specifications can be read below in Hungarian.
 
 ## Bemutatás
 
